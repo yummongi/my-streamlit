@@ -22,3 +22,32 @@ fig,ax = plt.subplots()
 ax.hist(rand, bins = 15)
 st.pyplot(fig)
 
+#add data
+import streamlit as st
+import pandas as pd
+
+# 데이터를 로드합니다.
+@st.cache
+def load_data():
+    data = pd.read_csv('대기질_데이터.csv') # 이 부분은 실제 데이터 파일의 경로와 일치해야 합니다.
+    return data
+
+data = load_data()
+
+# 앱의 타이틀을 설정합니다.
+st.title('대한민국 대기질 정보')
+
+# 사용자로부터 도시와 오염 물질을 선택하도록 합니다.
+city = st.selectbox('도시를 선택하세요.', data['도시'].unique())
+pollutant = st.selectbox('오염 물질을 선택하세요.', ['미세먼지', '초미세먼지', '이산화질소', '오존'])
+
+# 선택된 도시와 오염 물질에 대한 데이터를 필터링합니다.
+filtered_data = data[(data['도시'] == city) & (data['오염 물질'] == pollutant)]
+
+# 필터링된 데이터의 통계를 보여줍니다.
+st.write(filtered_data.describe())
+
+# 필터링된 데이터를 차트로 보여줍니다.
+st.line_chart(filtered_data['농도'])
+
+
