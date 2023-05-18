@@ -45,9 +45,11 @@ if st.checkbox('정류장 간 거리를 계산하시겠습니까?'):
         crs="EPSG:4326"
     )
 
+    # Rename the 'geometry' column to 'latitude' and 'longitude'
+    gdf = gdf.rename(columns={'geometry': 'latitude'})
+
     # Display the map with the two bus stops
     st.map(gdf)
-
 
 
 st.subheader('도시별 정류장 수')
