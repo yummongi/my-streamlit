@@ -46,11 +46,16 @@ if st.checkbox('정류장 간 거리를 계산하시겠습니까?'):
 
     gdf['latitude'] = gdf['longitude']
 
-    bbox = gdf.geometry.bounds
+
+    bbox = gpd.GeoSeries(gdf.apply(lambda row: Point(row['longitude'], row['latitude']), axis=1)).bounds
 
 
     min_lat = bbox['miny'].min()
     min_lon = bbox['minx'].min()
+
+
+    st.map(gdf, zoom=(min_lat, min_lon))
+
 
 
     st.map(gdf, zoom=(min_lat, min_lon))
