@@ -3,6 +3,8 @@ import pandas as pd
 import geopandas as gpd
 from shapely.geometry import Point
 
+
+
 @st.cache_data
 def load_data():
     data = pd.read_csv('bus_stop.csv')
@@ -32,22 +34,12 @@ if st.checkbox('정류장 간 거리를 계산하시겠습니까?'):
     st.write(f"{bus_stop_1}과(와) {bus_stop_2} 사이의 거리는 {distance} 입니다.")
 
 
-city = st.selectbox('정류장 분포를 확인하고 싶은 도시를 선택하세요.', data['도시명'].unique())
-city_data = data[data['도시명'] == city]
-st.map(city_data)
-
-
 st.subheader('도시별 정류장 수')
 city_counts = data['도시명'].value_counts()
 st.bar_chart(city_counts)
 
 
-if st.checkbox('도시별 정류장 수를 확인하시겠습니까?'):
-    city_counts = data['도시명'].value_counts()
-    plt.figure(figsize=(10,5))
-    plt.bar(city_counts.index, city_counts.values)
-    plt.xlabel('도시명')
-    plt.ylabel('정류장 수')
-    plt.title('도시별 정류장 수')
-    plt.xticks(rotation=90)
-    st.pyplot(plt)
+city = st.selectbox('정류장 분포를 확인하고 싶은 도시를 선택하세요.', data['도시명'].unique())
+city_data = data[data['도시명'] == city]
+st.map(city_data)
+
