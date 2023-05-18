@@ -38,15 +38,16 @@ if st.checkbox('정류장 간 거리를 계산하시겠습니까?'):
     st.write(f"{city_to_calculate_1}의 {bus_stop_1}과(와) {city_to_calculate_2}의 {bus_stop_2} 사이의 거리는 {distance} 입니다.")
 
     gdf = gpd.GeoDataFrame(
-        geometry=gpd.points_from_xy([location_1[1], location_2[1]], [location_1[0], location_2[0]]),
-        crs="EPSG:4326"
+    geometry=gpd.points_from_xy([location_1[1], location_2[1]], [location_1[0], location_2[0]]),
+    crs="EPSG:4326"
     )
 
     gdf = gdf.rename(columns={'geometry': 'longitude'})
 
     gdf['latitude'] = gdf['longitude']
-    st.map(gdf)
-
+    min_lat = gdf['latitude'].min()
+    min_lon = gdf['longitude'].min()
+    st.map(gdf, zoom=(min_lat, min_lon))
 
 st.subheader('도시별 정류장 수')
 city_counts = data['도시명'].value_counts()
