@@ -23,6 +23,7 @@ if bus_stop_to_search:
     st.write(bus_stop_data)
     st.map(bus_stop_data)  # 버스 정류장을 지도에 표시
 
+
 if st.checkbox('정류장 간 거리를 계산하시겠습니까?'):
     city_to_calculate_1 = st.selectbox("첫 번째 도시를 선택하세요.", data['도시명'].unique())
     bus_stop_1 = st.selectbox('첫 번째 도시의 정류장을 선택하세요.', data[data['도시명'] == city_to_calculate_1]['정류장명'].unique())
@@ -46,6 +47,7 @@ if st.checkbox('정류장 간 거리를 계산하시겠습니까?'):
 
     # Display the map with the two bus stops
     st.map(gdf)
+
 
 
 st.subheader('도시별 정류장 수')
