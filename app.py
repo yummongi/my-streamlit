@@ -33,9 +33,8 @@ if st.checkbox('정류장 간 거리를 계산하시겠습니까?'):
     location_2 = data[(data['정류장명'] == bus_stop_2) & (data['도시명'] == city_to_calculate_2)][['latitude', 'longitude']].values[0]
 
     gs = gpd.GeoSeries([Point(location_1), Point(location_2)])
-    distance = gs.distance(gs.shift()).values[1]
-
-    st.write(f"{city_to_calculate_1}의 {bus_stop_1}과(와) {city_to_calculate_2}의 {bus_stop_2} 사이의 거리는 {distance} 입니다.")
+    distance = gs.distance(gs.shift()).values[1] / 1000 #킬로미터 계산
+    st.write(f"{city_to_calculate_1}의 {bus_stop_1}과(와) {city_to_calculate_2}의 {bus_stop_2} 사이의 거리는 {distance:.2f} km 입니다.")
 
 st.subheader('도시별 정류장 수')
 city_counts = data['도시명'].value_counts()
