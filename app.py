@@ -49,3 +49,5 @@ city = st.selectbox('정류장 분포를 확인하고 싶은 도시를 선택하
 city_data = data[data['도시명'] == city]
 st.map(city_data)
 
+
+st.image('bus_image.jpg')
