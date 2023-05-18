@@ -23,16 +23,20 @@ if bus_stop_to_search:
 
 
 if st.checkbox('정류장 간 거리를 계산하시겠습니까?'):
+    # 배열로 반환
     city_to_calculate_1 = st.selectbox("첫 번째 도시를 선택하세요.", data['도시명'].unique())
+    # 선택된 도시의 정류장 표시
     bus_stop_1 = st.selectbox('첫 번째 도시의 정류장을 선택하세요.', data[data['도시명'] == city_to_calculate_1]['정류장명'].unique())
-
+    
     city_to_calculate_2 = st.selectbox("두 번째 도시를 선택하세요.", data['도시명'].unique())
     bus_stop_2 = st.selectbox('두 번째 도시의 정류장을 선택하세요.', data[data['도시명'] == city_to_calculate_2]['정류장명'].unique())
 
     location_1 = data[(data['정류장명'] == bus_stop_1) & (data['도시명'] == city_to_calculate_1)][['longitude', 'latitude']].values[0]
     location_2 = data[(data['정류장명'] == bus_stop_2) & (data['도시명'] == city_to_calculate_2)][['longitude', 'latitude']].values[0]
-
+    
+    # loocation_1,2 : 경도(longitude), 위도(latitude) 값을 가지며,두 개의 지점 객체를 생성
     gdf = gpd.GeoDataFrame(geometry=[Point(location_1[0], location_1[1]), Point(location_2[0], location_2[1])])
+    # 좌표 참조 시스템
     gdf = gdf.set_crs('EPSG:4326')
     gdf = gdf.to_crs('EPSG:3857') 
     distance = gdf.geometry.distance(gdf.shift()).values[1] / 1000  
