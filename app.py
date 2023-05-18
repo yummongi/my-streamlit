@@ -28,10 +28,10 @@ else:
 
 
 st.subheader("도시별 정류장 수")
-city_counts = data['도시'].value_counts().reset_index()
-city_counts.columns = ['도시', '정류장 수']
+city_counts = data['도시명'].value_counts().reset_index()
+city_counts.columns = ['도시명', '정류장 수']
 fig, ax = plt.subplots()
-sns.barplot(x='도시', y='정류장 수', data=city_counts, ax=ax)
+sns.barplot(x='도시명', y='정류장 수', data=city_counts, ax=ax)
 plt.xticks(rotation=45)
 st.pyplot(fig)
 
