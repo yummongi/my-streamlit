@@ -14,13 +14,11 @@ data = load_data()
 st.title('대한민국 버스 정류장 정보 조회')
 st.markdown('버스정보시스템(BIS)이 구축된 지자체 중 국가대중교통정보센터(TAGO)와 연계된 139개 지자체의 버스정류장 위치정보 데이터입니다.')
 
-bus_stop_name = st.text_input("정류장명을 입력하세요.")
-if bus_stop_name:
-    bus_stop_data = data[data['정류장명'] == bus_stop_name]
-    if not bus_stop_data.empty:
-        st.write(bus_stop_data)
-    else:
-        st.write("해당하는 정류장이 없습니다.")
+city_to_search = st.selectbox("정류장명을 검색할 도시를 선택하세요.", data['도시명'].unique())
+bus_stop_to_search = st.selectbox("정류장명을 선택하세요.", data[data['도시명'] == city_to_search]['정류장명'].unique())
+if bus_stop_to_search:
+    bus_stop_data = data[(data['정류장명'] == bus_stop_to_search) & (data['도시명'] == city_to_search)]
+    st.write(bus_stop_data)
 
 if st.checkbox('정류장 간 거리를 계산하시겠습니까?'):
     bus_stop_1 = st.selectbox('첫 번째 정류장을 선택하세요.', data['정류장명'].unique())
