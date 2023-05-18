@@ -35,11 +35,11 @@ if st.checkbox('정류장 간 거리를 계산하시겠습니까?'):
     gdf = gpd.GeoDataFrame(geometry=[Point(location_1[0], location_1[1]), Point(location_2[0], location_2[1])])
     gdf = gdf.set_crs('EPSG:4326')
     gdf = gdf.to_crs('EPSG:3857') 
-    distance = gdf.geometry.distance(gdf.shift()).values[1] / 1000  # Divide by 1000 to get the distance in kilometers
+    distance = gdf.geometry.distance(gdf.shift()).values[1] / 1000  
 
     st.write(f"{city_to_calculate_1}의 {bus_stop_1}과(와) {city_to_calculate_2}의 {bus_stop_2} 사이의 거리는 {distance:.2f} km 입니다.")
 
-if st.checkbox('도시별 정류장 수 보기'):
+if st.checkbox('도시별 정류장 수를 보시겠습니까?'):
     selected_cities = st.multiselect('도시를 선택하세요.', data['도시명'].unique())
     if selected_cities:
         city_counts = data[data['도시명'].isin(selected_cities)]['도시명'].value_counts()
