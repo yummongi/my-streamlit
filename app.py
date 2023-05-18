@@ -32,8 +32,11 @@ if st.checkbox('정류장 간 거리를 계산하시겠습니까?'):
     location_1 = data[(data['정류장명'] == bus_stop_1) & (data['도시명'] == city_to_calculate_1)][['longitude', 'latitude']].values[0]
     location_2 = data[(data['정류장명'] == bus_stop_2) & (data['도시명'] == city_to_calculate_2)][['longitude', 'latitude']].values[0]
 
-    gdf = gpd.GeoDataFrame(geometry=gpd.points_from_xy([location_1[0], location_2[0]], [location_1[1], location_2[1]]))
-    distance = gdf.geometry.distance(gdf.shift()).values[1]
+    gdf = gpd.GeoDataFrame(geometry=[Point(location_1[0], location_1[1]), Point(location_2[0], location_2[1])])
+    gdf = gdf.set_crs('EPSG:4326')  # Set the coordinate reference system
+    gdf = gdf.to_crs('EPSG:3857')  # Convert to a suitable projection for distance calculation
+
+    distance = gdf.geometry.distance(gdf.shift()).values[1] / 1000  # Divide by 1000 to get the distance in kilometers
 
     st.write(f"{city_to_calculate_1}의 {bus_stop_1}과(와) {city_to_calculate_2}의 {bus_stop_2} 사이의 거리는 {distance:.2f} km 입니다.")
 
