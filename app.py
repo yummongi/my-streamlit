@@ -9,7 +9,7 @@ plt.rcParams['font.family'] = 'NanumGothic'
 
 @st.cache_data
 def load_data():
-    return pd.read_csv("bus_data.csv")
+    return pd.read_csv("bus_stop.csv")
 
 data = load_data()
 data = data.rename(columns={'위도': 'lat', '경도': 'lon'})  # 위도, 경도 컬럼 이름 변경
