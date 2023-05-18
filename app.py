@@ -19,15 +19,17 @@ bus_stop_to_search = st.selectbox("정류장명을 선택하세요.", data[data[
 if bus_stop_to_search:
     bus_stop_data = data[(data['정류장명'] == bus_stop_to_search) & (data['도시명'] == city_to_search)]
     st.write(bus_stop_data)
+    st.map(bus_stop_data)  # 버스 정류장을 지도에 표시
 
 if st.checkbox('정류장 간 거리를 계산하시겠습니까?'):
-    bus_stop_1 = st.selectbox('첫 번째 정류장을 선택하세요.', data['정류장명'].unique())
-    bus_stop_2 = st.selectbox('두 번째 정류장을 선택하세요.', data['정류장명'].unique())
-    location_1 = data[data['정류장명'] == bus_stop_1][['latitude', 'longitude']].values[0]
-    location_2 = data[data['정류장명'] == bus_stop_2][['latitude', 'longitude']].values[0]
+    city_to_calculate = st.selectbox("정류장 간 거리를 계산할 도시를 선택하세요.", data['도시명'].unique())
+    bus_stop_1 = st.selectbox('첫 번째 정류장을 선택하세요.', data[data['도시명'] == city_to_calculate]['정류장명'].unique())
+    bus_stop_2 = st.selectbox('두 번째 정류장을 선택하세요.', data[data['도시명'] == city_to_calculate]['정류장명'].unique())
+    location_1 = data[(data['정류장명'] == bus_stop_1) & (data['도시명'] == city_to_calculate)][['latitude', 'longitude']].values[0]
+    location_2 = data[(data['정류장명'] == bus_stop_2) & (data['도시명'] == city_to_calculate)][['latitude', 'longitude']].values[0]
     gs = gpd.GeoSeries([Point(location_1), Point(location_2)])
     distance = gs.distance(gs.shift()).values[1]
-    st.write(f"{bus_stop_1}과(와) {bus_stop_2} 사이의 거리는 약 {distance:.2f}km입니다.")
+    st.write(f"{bus_stop_1}과(와) {bus_stop_2} 사이의 거리는 {distance} 입니다.")
 
 
 city = st.selectbox('정류장 분포를 확인하고 싶은 도시를 선택하세요.', data['도시명'].unique())
@@ -38,3 +40,14 @@ st.map(city_data)
 st.subheader('도시별 정류장 수')
 city_counts = data['도시명'].value_counts()
 st.bar_chart(city_counts)
+
+
+if st.checkbox('도시별 정류장 수를 확인하시겠습니까?'):
+    city_counts = data['도시명'].value_counts()
+    plt.figure(figsize=(10,5))
+    plt.bar(city_counts.index, city_counts.values)
+    plt.xlabel('도시명')
+    plt.ylabel('정류장 수')
+    plt.title('도시별 정류장 수')
+    plt.xticks(rotation=90)
+    st.pyplot(plt)
