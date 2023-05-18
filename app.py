@@ -45,9 +45,16 @@ if st.checkbox('정류장 간 거리를 계산하시겠습니까?'):
     gdf = gdf.rename(columns={'geometry': 'longitude'})
 
     gdf['latitude'] = gdf['longitude']
-    min_lat = gdf['latitude'].min()
-    min_lon = gdf['longitude'].min()
+
+    bbox = gdf.geometry.bounds
+
+
+    min_lat = bbox['miny'].min()
+    min_lon = bbox['minx'].min()
+
+
     st.map(gdf, zoom=(min_lat, min_lon))
+
 
 st.subheader('도시별 정류장 수')
 city_counts = data['도시명'].value_counts()
