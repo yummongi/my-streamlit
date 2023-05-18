@@ -24,14 +24,19 @@ if bus_stop_to_search:
     st.map(bus_stop_data)  # 버스 정류장을 지도에 표시
 
 if st.checkbox('정류장 간 거리를 계산하시겠습니까?'):
-    city_to_calculate = st.selectbox("정류장 간 거리를 계산할 도시를 선택하세요.", data['도시명'].unique())
-    bus_stop_1 = st.selectbox('첫 번째 정류장을 선택하세요.', data[data['도시명'] == city_to_calculate]['정류장명'].unique())
-    bus_stop_2 = st.selectbox('두 번째 정류장을 선택하세요.', data[data['도시명'] == city_to_calculate]['정류장명'].unique())
-    location_1 = data[(data['정류장명'] == bus_stop_1) & (data['도시명'] == city_to_calculate)][['latitude', 'longitude']].values[0]
-    location_2 = data[(data['정류장명'] == bus_stop_2) & (data['도시명'] == city_to_calculate)][['latitude', 'longitude']].values[0]
+    city_to_calculate_1 = st.selectbox("첫 번째 도시를 선택하세요.", data['도시명'].unique())
+    bus_stop_1 = st.selectbox('첫 번째 도시의 정류장을 선택하세요.', data[data['도시명'] == city_to_calculate_1]['정류장명'].unique())
+
+    city_to_calculate_2 = st.selectbox("두 번째 도시를 선택하세요.", data['도시명'].unique())
+    bus_stop_2 = st.selectbox('두 번째 도시의 정류장을 선택하세요.', data[data['도시명'] == city_to_calculate_2]['정류장명'].unique())
+
+    location_1 = data[(data['정류장명'] == bus_stop_1) & (data['도시명'] == city_to_calculate_1)][['latitude', 'longitude']].values[0]
+    location_2 = data[(data['정류장명'] == bus_stop_2) & (data['도시명'] == city_to_calculate_2)][['latitude', 'longitude']].values[0]
+
     gs = gpd.GeoSeries([Point(location_1), Point(location_2)])
     distance = gs.distance(gs.shift()).values[1]
-    st.write(f"{bus_stop_1}과(와) {bus_stop_2} 사이의 거리는 {distance} 입니다.")
+
+    st.write(f"{city_to_calculate_1}의 {bus_stop_1}과(와) {city_to_calculate_2}의 {bus_stop_2} 사이의 거리는 {distance} 입니다.")
 
 
 st.subheader('도시별 정류장 수')
