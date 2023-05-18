@@ -1,40 +1,32 @@
 import streamlit as st
 import pandas as pd
-import matplotlib.pyplot as plt
-import matplotlib.font_manager as fm
-import seaborn as sns
-from datetime import datetime
-
-plt.rcParams['font.family'] = 'NanumGothic'
 
 @st.cache_data
 def load_data():
-    return pd.read_csv("bus_stop.csv")
+    data = pd.read_csv('bus_stop.csv')
+    data = data.rename(columns={'위도': 'latitude', '경도': 'longitude'})
+    return data
 
 data = load_data()
-data = data.rename(columns={'위도': 'lat', '경도': 'lon'})  # 위도, 경도 컬럼 이름 변경
 
-st.title("버스 정류장 정보")
-st.markdown("이 웹 앱은 전국의 버스 정류장 정보를 보여줍니다.")
-
-
-st.markdown("원하는 데이터를 선택하십시오.")
-selected_columns = st.multiselect("원하는 컬럼을 선택하세요.", data.columns)
-
-if selected_columns:
-    st.dataframe(data[selected_columns])
-else:
-    st.dataframe(data)
+st.title('대한민국 버스 정류장 정보 조회')
+st.markdown('버스정보시스템(BIS)이 구축된 지자체 중 국가대중교통정보센터(TAGO)와 연계된 139개 지자체의 버스정류장 위치정보 데이터입니다.')
 
 
-st.subheader("도시별 정류장 수")
-city_counts = data['도시명'].value_counts().reset_index()
-city_counts.columns = ['도시명', '정류장 수']
-fig, ax = plt.subplots()
-sns.barplot(x='도시명', y='정류장 수', data=city_counts, ax=ax)
-plt.xticks(rotation=45)
-st.pyplot(fig)
+cities = data['도시명'].unique()
+city = st.selectbox('도시를 선택하세요.', cities)
 
 
-st.subheader("정류장 위치")
-st.map(data)
+bus_stops = data[data['도시명'] == city]['정류장명'].unique()
+bus_stop = st.selectbox('정류장을 선택하세요.', bus_stops)
+
+filtered_data = data[(data['도시명'] == city) & (data['정류장명'] == bus_stop)]
+
+
+st.write(filtered_data)
+
+st.map(filtered_data)
+
+
+city_counts = data['도시명'].value_counts()
+st.bar_chart(city_counts)
