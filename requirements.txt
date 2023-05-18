@@ -1,8 +1,4 @@
-matplotlib
-numpy
 pandas
 streamlit
-datetime
-seaborn
 geopandas
 Point
