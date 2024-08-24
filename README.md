@@ -1,2 +1,2 @@
 # my_streamlit
-OSS 개발 streamlit 연습 레포지토리
+🏫 동아대학교 OSS 개발 - streamlit 연습
